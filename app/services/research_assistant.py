@@ -5,7 +5,7 @@ from langgraph.checkpoint.memory import MemorySaver
 from langchain_openai import ChatOpenAI
 from .tools.prompt_loader import prompt_loader 
 from .tools.tools import ResearchTool
-from utils.logger import Logger
+from app.utils.logger import Logger
 
 
 

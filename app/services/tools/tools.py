@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
 from .prompt_loader import prompt_loader
-from utils.logger import Logger
+from app.utils.logger import Logger
 from dotenv import load_dotenv
 
 load_dotenv()

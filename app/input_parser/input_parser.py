@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from pypdf import PdfReader  
 from docx import Document
-from utils.logger import Logger
+from app.utils.logger import Logger
 
 logger = Logger.get_logger()
 

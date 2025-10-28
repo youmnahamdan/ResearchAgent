@@ -1,9 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from input_parser import FileParser
-from services.research_assistant import ResearchAgent
-from utils.logger import Logger
+from .input_parser import FileParser
+from app.services.research_assistant import ResearchAgent
+from app.utils.logger import Logger
 
 logger = Logger.get_logger()
 
@@ -20,7 +20,7 @@ app = FastAPI(
 )
 
 @app.post(
-    "/ask-agent/",
+    "/ask-agent",
     response_model=AgentResponse,
     summary="Parse input file and prompt AI agent for response.",
     description=(
