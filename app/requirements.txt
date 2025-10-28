@@ -5,3 +5,7 @@ OpenAI
 langchain-community
 python-docx
 fastapi[standard]
+dotenv
+pydantic
+langgraph
+docx

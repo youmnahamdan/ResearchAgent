@@ -1,37 +1,8 @@
-'''
-
-# use async funcs and  / batch calls
-input {
-reserch content  / file
-question/query
-}
-
-output {
-summary
-key - insights
-These are the core takeaways or discoveries extracted from the given text.
-They capture what’s new, important, or surprising — like the “Aha!” moments a human reader would note down.
-
-follow-up questions
-These are deep, reflective, or research-oriented questions that arise naturally after reading the text.
-They invite further exploration — just like a curious researcher or reviewer would ask.
-}
 
 
-tools:
-* summarize research content
-* extract key insights
-* generate follow up questions
-
-each tool will have a prompt and will run async
-'''
-
-
-from urllib import response
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import SystemMessage
 from .tools.prompt_loader import prompt_loader 
 from .tools.tools import ResearchTool
 from utils.logger import Logger
