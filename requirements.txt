@@ -10,3 +10,4 @@ pydantic
 langgraph
 docx
 uvicorn
+langchain
