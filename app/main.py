@@ -44,4 +44,4 @@ async def ask_agent(file: UploadFile = File(..., description="Your research file
         raise he
     except Exception as e:
         logger.error(f"Error processing file: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
