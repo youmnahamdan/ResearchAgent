@@ -2,7 +2,7 @@ services:
   - type: web
     name: research-agent-api
     env: python
-    region: palestine
+    region: singapore
     buildCommand: pip install --no-cache-dir -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
     plan: free
