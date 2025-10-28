@@ -1,0 +1,7 @@
+pypdf
+langchain-core
+langchain-openai
+OpenAI 
+langchain-community
+python-docx
+fastapi[standard]
