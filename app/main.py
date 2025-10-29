@@ -1,5 +1,4 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from app.input_parser import FileParser
 from app.services.research_assistant import ResearchAgent
