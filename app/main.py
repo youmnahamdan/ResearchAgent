@@ -45,8 +45,7 @@ async def ask_agent(
             )
 
         agent_res = ResearchAgent().run(text)
-        return JSONResponse(content=agent_res)
-        return {"response": "fake agent_res"}
+        return {"response": agent_res}
 
     except HTTPException as he:
         logger.warning(f"HTTP error: {he.detail}")
