@@ -44,8 +44,8 @@ async def ask_agent(
                 detail="Unsupported file type. Supported: PDF, DOCX, TXT",
             )
 
-        # agent_res = ResearchAgent().run(text)
-        # return JSONResponse(content=agent_res)
+        agent_res = ResearchAgent().run(text)
+        return JSONResponse(content=agent_res)
         return {"response": "fake agent_res"}
 
     except HTTPException as he:
