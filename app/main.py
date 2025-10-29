@@ -44,7 +44,7 @@ async def ask_agent(
                 detail="Unsupported file type. Supported: PDF, DOCX, TXT",
             )
 
-        agent_res = ResearchAgent().run(text)
+        agent_res = await ResearchAgent().run(text)
         return {"response": agent_res}
 
     except HTTPException as he:

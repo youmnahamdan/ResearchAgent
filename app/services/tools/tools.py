@@ -1,4 +1,4 @@
-import asyncio 
+import asyncio
 from typing import List
 from pydantic import BaseModel
 from openai import OpenAI
@@ -11,13 +11,12 @@ load_dotenv()
 
 logger = Logger.get_logger()
 
+
 # use runnableparallel
 def generate_completion(messages, response_format):
     logger.debug("making OpenAI client")
     return OpenAI().beta.chat.completions.parse(
-        model="gpt-5-nano",
-        messages=messages,
-        response_format=response_format
+        model="gpt-5-nano", messages=messages, response_format=response_format
     )
 
 
@@ -25,7 +24,6 @@ class ResearchAnalysisResult(BaseModel):
     summary: str
     key_insights: List[str]
     follow_up_questions: List[str]
-
 
 
 class ResearchTool:
@@ -46,28 +44,48 @@ class ResearchTool:
     async def build_messages(self, system_prompt: str, user_content: str):
         return [
             SystemMessage(content=system_prompt, role="system"),
-            HumanMessage(content=user_content, role="user")
+            HumanMessage(content=user_content, role="user"),
         ]
 
     async def summarize(self, text: str) -> str:
+        """Summarize research.
+        Args:
+            - text: research content.
+        """
         logger.debug(f"Summarize Research")
         messages = await self.build_messages(prompt_loader("summarize.txt"), text)
         response = generate_completion(messages, response_format=self.SummaryModel)
         return response.choices[0].message.parsed.summary
 
     async def extract_insights(self, text: str) -> List[str]:
+        """Extract meaningful insights.
+        Args:
+            - text: research content.
+        """
         logger.debug(f"Extract Insights")
-        messages = await self.build_messages(prompt_loader("provide_insights.txt"), text)
+        messages = await self.build_messages(
+            prompt_loader("provide_insights.txt"), text
+        )
         response = generate_completion(messages, response_format=self.InsightsModel)
         return response.choices[0].message.parsed.insights
 
     async def generate_questions(self, text: str) -> List[str]:
+        """Generate eye-openning follow-up questions.
+        Args:
+            - text: research content.
+        """
         logger.debug(f"Generating Questions")
-        messages = await self.build_messages(prompt_loader("generate_questions.txt"), text)
+        messages = await self.build_messages(
+            prompt_loader("generate_questions.txt"), text
+        )
         response = generate_completion(messages, response_format=self.QuestionsModel)
         return response.choices[0].message.parsed.questions
 
-    async def await_tools(self, text: str) -> ResearchAnalysisResult:
+    async def analyze_research(self, text: str) -> ResearchAnalysisResult:
+        """Summarize, provide insights, and generate follow-up questions.
+        Args:
+            - text: research content.
+        """
         summary_task = self.summarize(text)
         insights_task = self.extract_insights(text)
         questions_task = self.generate_questions(text)
@@ -79,18 +97,5 @@ class ResearchTool:
         return ResearchAnalysisResult(
             summary=summary_text,
             key_insights=key_insights,
-            follow_up_questions=follow_up_questions
+            follow_up_questions=follow_up_questions,
         )
-    
-    def analyze_research(self, text: str) -> ResearchAnalysisResult:
-        """Summarize, provide insights, and generate follow-up questions.
-        Args:
-            - text: research content.
-        """
-        try: 
-            analysis_result = asyncio.run(self.await_tools(text))
-            logger.debug(f"Analysis Result: {analysis_result}")
-            return analysis_result
-        except RuntimeError:
-            logger.info(f"An even loop alreasy exists")
-            return asyncio.get_event_loop().run_until_complete(self.await_tools(text))

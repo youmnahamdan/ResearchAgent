@@ -26,12 +26,17 @@ class ResearchAgent:
         return prompt_loader("system_prompt.txt")
 
     def __load_tools(self):
-        tools = [ResearchTool().analyze_research]
+        tool_object = ResearchTool()
+        tools = [
+            tool_object.summarize,
+            tool_object.extract_insights,
+            tool_object.generate_questions,
+        ]
         return tools
 
-    def run(self, research_content: str, thread_id: str = "1"):
+    async def run(self, research_content: str, thread_id: str = "1"):
         config = {"configurable": {"thread_id": thread_id}}
-        response = self.agent.invoke(
+        response = await self.agent.ainvoke(
             {
                 "messages": [
                     {

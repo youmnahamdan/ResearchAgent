@@ -24,18 +24,20 @@ class Logger:
 
             handlers = [
                 RotatingFileHandler(
-                    "logs/log.log", mode="a", maxBytes=10 * 1024 * 1024, backupCount=5
+                    "logs/log.log",
+                    mode="a",
+                    maxBytes=10 * 1024 * 1024 * 1024,
+                    backupCount=5,
                 ),
                 StreamHandler(sys.stdout),
             ]
 
-            if not self._logger.handlers:
-                for handler in handlers:
-                    handler.setFormatter(
-                        logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
-                    )
-                    handler.setLevel(level)
-                    self._logger.addHandler(handler)
+            for handler in handlers:
+                handler.setFormatter(
+                    logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+                )
+                handler.setLevel(level)
+                self._logger.addHandler(handler)
             self._initialized = True
 
     @classmethod
