@@ -1,3 +1,4 @@
+import traceback
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from app.input_parser import FileParser
@@ -51,4 +52,5 @@ async def ask_agent(
         raise he
     except Exception as e:
         logger.error(f"Error processing file: {e}")
+        logger.error(f"Error processing file: {e}\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
