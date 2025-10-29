@@ -1,36 +1,41 @@
 import os
+import sys
 import logging
 from logging.handlers import RotatingFileHandler
+from logging import StreamHandler
 
 
 class Logger:
-    _instance = None 
+    _instance = None
+
     def __new__(cls):
         if not cls._instance:
             cls._instance = super().__new__(cls)
         return cls._instance
-    
+
     def __init__(self):
         if not hasattr(self, "_initialized"):
             self._logger = logging.getLogger("Journal-Daily")
-            self._logger.setLevel(logging.DEBUG)
+            level = logging.DEBUG
+            self._logger.setLevel(level)
 
             if not os.path.exists("logs"):
                 os.makedirs("logs")
 
-            handler = RotatingFileHandler(
-                "logs/log.log",
-                mode="a",
-                maxBytes=10*1024*1024,
-                backupCount=5
-            )
-
-            handler.setFormatter(logging.Formatter(
-                "%(asctime)s [%(levelname)s] %(message)s"
-            ))
+            handlers = [
+                RotatingFileHandler(
+                    "logs/log.log", mode="a", maxBytes=10 * 1024 * 1024, backupCount=5
+                ),
+                StreamHandler(sys.stdout),
+            ]
 
             if not self._logger.handlers:
-                self._logger.addHandler(handler)
+                for handler in handlers:
+                    handler.setFormatter(
+                        logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+                    )
+                    handler.setLevel(level)
+                    self._logger.addHandler(handler)
             self._initialized = True
 
     @classmethod
@@ -49,4 +54,3 @@ class Logger:
                 f"{e}"
             )
             self._logger.error(error_string)
-
